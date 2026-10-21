@@ -261,6 +261,21 @@
         category: '手搖飲料',
         url: 'https://aniceholiday.doteat.tw/menu?storeId=NQv0nErm-00006vf7Le&showBulletin=1&utm_source=store&utm_medium=qrcode&utm_campaign=6956&waitOnSpotMode=1', // 台北延平南店 QR 碼
         desc: '掃碼點餐 / 線上支付 / 取茶付現'
+      },
+
+      {
+        id: '3',
+        name: '鬍鬚張（台北南門店）',
+        category: '便當快餐',
+        url: 'https://ddc.ai/3zeeVm',
+        desc: '南門店外帶線上點餐'
+      },
+      {
+        id: '4',
+        name: '樂天皇朝（候位登記）',
+        category: '候位登記',
+        url: 'https://inline.app/-LRIFWFrmwD1RkG6jysN:inline-live-2a466/-NibSLtgOfzmxguiLkAw/waiting',
+        desc: '線上候位登記'
       }
     ];
 
@@ -298,6 +313,13 @@
             }
             return next;
           });
+          // 將新增的點餐與候位捷徑補入既有手機資料
+          for (const item of INITIAL_STORES.slice(2)) {
+            if (!stores.some(store => store.id === item.id || store.name === item.name)) {
+              stores.push(item);
+              migrated = true;
+            }
+          }
           if (migrated) saveToLocalStorage();
         } catch (e) {
           stores = [...INITIAL_STORES];
@@ -415,7 +437,7 @@
             <a href="${escapeHtml(store.url)}" target="_blank" rel="noopener noreferrer" 
               class="flex-1 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-medium text-xs py-2.5 px-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 transition active:scale-95">
               <i class="fa-solid fa-utensils"></i>
-              <span>立即點餐</span>
+              <span>${store.category === '候位登記' ? '立即候位' : '立即點餐'}</span>
             </a>
 
             <!-- 複製網址按鈕 -->
