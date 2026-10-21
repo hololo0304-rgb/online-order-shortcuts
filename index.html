@@ -276,6 +276,14 @@
         category: '候位登記',
         url: 'https://inline.app/-LRIFWFrmwD1RkG6jysN:inline-live-2a466/-NibSLtgOfzmxguiLkAw/waiting',
         desc: '線上候位登記'
+      },
+
+      {
+        id: '5',
+        name: '雙月',
+        category: '便當快餐',
+        url: 'https://line.quickclick.cc/line/views/web/menu?accountId=5858&token=6db54a773c1db603fc69e73f480a166c93ee8b4c753e0e820c32480d49154e6f',
+        desc: '線上點餐'
       }
     ];
 
@@ -319,6 +327,10 @@
               stores.push(item);
               migrated = true;
             }
+          }
+          if (!stores.some(store => store.id === '5' || store.name === '雙月')) {
+            stores.push(INITIAL_STORES.find(item => item.id === '5'));
+            migrated = true;
           }
           if (migrated) saveToLocalStorage();
         } catch (e) {
