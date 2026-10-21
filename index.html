@@ -252,14 +252,14 @@
         id: '1',
         name: '八方雲集（延平南店）',
         category: '水餃鍋貼',
-        url: 'https://order.bafang.com.tw', // 可根據實際連結調整
+        url: 'https://onlineorder.8way.com.tw/NOrder.aspx?SID=0875&OTP=09', // 延平南店 QR 碼
         desc: '外帶點餐免排隊 / 電子支付'
       },
       {
         id: '2',
-        name: '一杯日 A NICE HOLIDAY（台北延平南店）',
+        name: '一沐日（台北延平南店）',
         category: '手搖飲料',
-        url: 'https://order.aniceholiday.com.tw', // 可根據實際連結調整
+        url: 'https://aniceholiday.doteat.tw/menu?storeId=NQv0nErm-00006vf7Le&showBulletin=1&utm_source=store&utm_medium=qrcode&utm_campaign=6956&waitOnSpotMode=1', // 台北延平南店 QR 碼
         desc: '掃碼點餐 / 線上支付 / 取茶付現'
       }
     ];
@@ -281,6 +281,24 @@
       if (saved) {
         try {
           stores = JSON.parse(saved);
+          // 將舊版品牌首頁自動更新為照片中掃描到的延平南店專屬 QR 碼網址
+          let migrated = false;
+          stores = stores.map(store => {
+            const next = { ...store };
+            if (next.name && /一沐日|A NICE HOLIDAY|一杯日/i.test(next.name) &&
+                /^https?:\\/\\/order\\.aniceholiday\\.com\\.tw\\/?$/i.test(next.url || '')) {
+              next.url = INITIAL_STORES.find(item => item.id === '2').url;
+              next.name = '一沐日（台北延平南店）';
+              migrated = true;
+            }
+            if (next.name && /八方雲集/.test(next.name) &&
+                /^https?:\\/\\/order\\.bafang\\.com\\.tw\\/?$/i.test(next.url || '')) {
+              next.url = INITIAL_STORES.find(item => item.id === '1').url;
+              migrated = true;
+            }
+            return next;
+          });
+          if (migrated) saveToLocalStorage();
         } catch (e) {
           stores = [...INITIAL_STORES];
         }
