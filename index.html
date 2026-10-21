@@ -286,13 +286,13 @@
           stores = stores.map(store => {
             const next = { ...store };
             if (next.name && /一沐日|A NICE HOLIDAY|一杯日/i.test(next.name) &&
-                /^https?:\\/\\/order\\.aniceholiday\\.com\\.tw\\/?$/i.test(next.url || '')) {
+                ['https://order.aniceholiday.com.tw', 'https://order.aniceholiday.com.tw/', 'http://order.aniceholiday.com.tw', 'http://order.aniceholiday.com.tw/'].includes(String(next.url || '').toLowerCase())) {
               next.url = INITIAL_STORES.find(item => item.id === '2').url;
               next.name = '一沐日（台北延平南店）';
               migrated = true;
             }
             if (next.name && /八方雲集/.test(next.name) &&
-                /^https?:\\/\\/order\\.bafang\\.com\\.tw\\/?$/i.test(next.url || '')) {
+                ['https://order.bafang.com.tw', 'https://order.bafang.com.tw/', 'http://order.bafang.com.tw', 'http://order.bafang.com.tw/'].includes(String(next.url || '').toLowerCase())) {
               next.url = INITIAL_STORES.find(item => item.id === '1').url;
               migrated = true;
             }
