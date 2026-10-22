@@ -208,9 +208,22 @@
       renderStoreList();
     };
 
-    // 店家資料直接由 INITIAL_STORES 維護，修改程式碼後重新整理即可更新
+    // 店家資料直接由 INITIAL_STORES 維護；每天以日期為種子重新排列
     function loadStores() {
       stores = INITIAL_STORES.map(store => ({ ...store }));
+
+      const today = new Date();
+      const daySeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+      let seed = daySeed;
+      const randomForToday = () => {
+        seed = (seed * 9301 + 49297) % 233280;
+        return seed / 233280;
+      };
+
+      for (let i = stores.length - 1; i > 0; i--) {
+        const j = Math.floor(randomForToday() * (i + 1));
+        [stores[i], stores[j]] = [stores[j], stores[i]];
+      }
     }
 
     // 渲染分類標籤
