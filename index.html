@@ -53,27 +53,24 @@
         </div>
         <div>
           <h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white leading-tight">線上點餐捷徑</h1>
-          <p class="text-xs text-slate-500 dark:text-slate-400">免排隊 · 掃碼快點</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400">點餐與候位，一鍵開啟</p>
         </div>
       </div>
       <div class="flex items-center gap-1">
         <button onclick="openModal('pwaModal')" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition" title="加到主畫面">
           <i class="fa-solid fa-mobile-screen-button text-lg"></i>
         </button>
-        <button onclick="openModal('backupModal')" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition" title="備份與匯入">
-          <i class="fa-solid fa-database text-lg"></i>
-        </button>
       </div>
     </div>
   </header>
 
   <!-- 主內容區 -->
-  <main class="max-w-md mx-auto px-4 pt-4 space-y-4">
+  <main class="max-w-md mx-auto px-4 pt-3 space-y-3">
 
     <!-- 搜尋欄 -->
     <div class="relative">
       <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-      <input type="text" id="searchInput" oninput="renderStoreList()" placeholder="搜尋店家名稱或備註..." 
+      <input type="text" id="searchInput" oninput="renderStoreList()" placeholder="搜尋店家名稱或分類..." 
         class="w-full pl-10 pr-9 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 shadow-sm transition">
       <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs p-1">
         <i class="fa-solid fa-xmark"></i>
@@ -86,7 +83,7 @@
     </div>
 
     <!-- 店家卡片列表 -->
-    <div id="storeList" class="space-y-3.5">
+    <div id="storeList" class="space-y-2">
       <!-- 卡片內容由 JS 動態生成 -->
     </div>
 
@@ -96,75 +93,15 @@
         <i class="fa-solid fa-store-slash"></i>
       </div>
       <p class="text-slate-600 dark:text-slate-300 font-medium">找不到相關店家</p>
-      <p class="text-xs text-slate-400 mt-1">您可以嘗試不同的搜尋關鍵字或新增新店家。</p>
+      <p class="text-xs text-slate-400 mt-1">請調整搜尋關鍵字或分類。</p>
     </div>
 
   </main>
 
-  <!-- 浮動新增按鈕 (FAB) -->
-  <button onclick="openAddModal()" class="fixed right-5 bottom-6 z-20 bg-gradient-to-r from-sky-500 to-blue-600 text-white p-4 rounded-full shadow-lg shadow-sky-500/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 px-5 font-medium text-sm">
-    <i class="fa-solid fa-plus text-base"></i>
-    <span>新增店家</span>
-  </button>
-
   <!-- 提示訊息 Toast -->
-  <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 dark:bg-white/90 text-white dark:text-slate-900 text-xs px-4 py-2.5 rounded-full shadow-xl pointer-events-none transition-all duration-300 opacity-0 translate-y-4 flex items-center gap-2 backdrop-blur-sm">
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 dark:bg-white/90 text-white dark:text-slate-900 text-xs px-4 py-2.5 rounded-full shadow-xl pointer-events-none transition-all duration-300 opacity-0 translate-y-4 flex items-center gap-2 backdrop-blur-sm">
     <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600"></i>
     <span id="toastMessage">已複製網址</span>
-  </div>
-
-  <!-- 新增/編輯店家 Modal -->
-  <div id="storeModal" class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-    <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-6 shadow-2xl transform translate-y-full sm:translate-y-0 transition-transform duration-300">
-      <div class="flex justify-between items-center mb-4">
-        <h3 id="modalTitle" class="text-lg font-bold text-slate-900 dark:text-white">新增點餐店家</h3>
-        <button onclick="closeModal('storeModal')" class="text-slate-400 hover:text-slate-600 p-1">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <form id="storeForm" onsubmit="saveStore(event)" class="space-y-4">
-        <input type="hidden" id="storeId">
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">店家名稱與分店 <span class="text-red-500">*</span></label>
-          <input type="text" id="storeName" required placeholder="例如：八方雲集（延平南店）" 
-            class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">分類 <span class="text-red-500">*</span></label>
-          <div class="flex gap-2">
-            <input type="text" id="storeCategory" required placeholder="例如：水餃鍋貼 / 手搖飲料" 
-              class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-          </div>
-          <!-- 快速分類選擇 -->
-          <div class="flex flex-wrap gap-1.5 mt-2">
-            <button type="button" onclick="selectQuickCategory('水餃鍋貼')" class="text-xs bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-200">+ 水餃鍋貼</button>
-            <button type="button" onclick="selectQuickCategory('手搖飲料')" class="text-xs bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-200">+ 手搖飲料</button>
-            <button type="button" onclick="selectQuickCategory('早午餐')" class="text-xs bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-200">+ 早午餐</button>
-            <button type="button" onclick="selectQuickCategory('便當快餐')" class="text-xs bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-200">+ 便當快餐</button>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">點餐網址 (URL) <span class="text-red-500">*</span></label>
-          <input type="url" id="storeUrl" required placeholder="https://..." 
-            class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">備註 / 特點說明</label>
-          <input type="text" id="storeDesc" placeholder="例如：外帶免排隊 / 取茶付現" 
-            class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-        </div>
-
-        <div class="pt-3 flex gap-3">
-          <button type="button" onclick="closeModal('storeModal')" class="flex-1 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 text-sm">取消</button>
-          <button type="submit" class="flex-1 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl font-medium text-sm shadow-md shadow-sky-500/20">儲存</button>
-        </div>
-      </form>
-    </div>
   </div>
 
   <!-- 加到主畫面 (PWA) 指引 Modal -->
@@ -210,40 +147,6 @@
     </div>
   </div>
 
-  <!-- 備份與匯入 Modal -->
-  <div id="backupModal" class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-    <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
-      <div class="flex justify-between items-center border-b pb-3 border-slate-100 dark:border-slate-700">
-        <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <i class="fa-solid fa-floppy-disk text-sky-500"></i>
-          資料備份與復原
-        </h3>
-        <button onclick="closeModal('backupModal')" class="text-slate-400 hover:text-slate-600">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <p class="text-xs text-slate-500 dark:text-slate-400">換手機或備份時，可將您的店家資料導出為 JSON 檔案保存。</p>
-
-      <div class="grid grid-cols-2 gap-3 pt-1">
-        <button onclick="exportData()" class="flex flex-col items-center justify-center p-4 border-2 border-dashed border-sky-200 dark:border-sky-900/50 bg-sky-50/50 dark:bg-sky-950/20 rounded-xl hover:bg-sky-100/50 transition group">
-          <i class="fa-solid fa-download text-2xl text-sky-600 dark:text-sky-400 mb-1 group-hover:scale-110 transition-transform"></i>
-          <span class="text-xs font-bold text-slate-700 dark:text-slate-200">導出資料 (JSON)</span>
-        </button>
-
-        <label class="flex flex-col items-center justify-center p-4 border-2 border-dashed border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-xl hover:bg-emerald-100/50 transition cursor-pointer group">
-          <i class="fa-solid fa-upload text-2xl text-emerald-600 dark:text-emerald-400 mb-1 group-hover:scale-110 transition-transform"></i>
-          <span class="text-xs font-bold text-slate-700 dark:text-slate-200">匯入資料 (JSON)</span>
-          <input type="file" accept=".json" onchange="importData(event)" class="hidden">
-        </label>
-      </div>
-
-      <div class="border-t pt-3 border-slate-100 dark:border-slate-700">
-        <button onclick="resetDefaultData()" class="w-full text-xs text-rose-500 hover:text-rose-600 py-1 text-center font-medium">重置為預設預設資料</button>
-      </div>
-    </div>
-  </div>
-
   <!-- JavaScript 邏輯 -->
   <script>
     // 預設店家資料（包含照片中的兩家店家）
@@ -253,14 +156,12 @@
         name: '八方雲集（延平南店）',
         category: '水餃鍋貼',
         url: 'https://onlineorder.8way.com.tw/NOrder.aspx?SID=0875&OTP=09', // 延平南店 QR 碼
-        desc: '外帶點餐免排隊 / 電子支付'
       },
       {
         id: '2',
         name: '一沐日（台北延平南店）',
         category: '手搖飲料',
         url: 'https://aniceholiday.doteat.tw/menu?storeId=NQv0nErm-00006vf7Le&showBulletin=1&utm_source=store&utm_medium=qrcode&utm_campaign=6956&waitOnSpotMode=1', // 台北延平南店 QR 碼
-        desc: '掃碼點餐 / 線上支付 / 取茶付現'
       },
 
       {
@@ -268,14 +169,12 @@
         name: '鬍鬚張（台北南門店）',
         category: '便當快餐',
         url: 'https://ddc.ai/3zeeVm',
-        desc: '南門店外帶線上點餐'
       },
       {
         id: '4',
         name: '樂天皇朝（候位登記）',
         category: '候位登記',
         url: 'https://inline.app/-LRIFWFrmwD1RkG6jysN:inline-live-2a466/-NibSLtgOfzmxguiLkAw/waiting',
-        desc: '線上候位登記'
       },
 
       {
@@ -283,7 +182,6 @@
         name: '雙月',
         category: '便當快餐',
         url: 'https://line.quickclick.cc/line/views/web/menu?accountId=5858&token=6db54a773c1db603fc69e73f480a166c93ee8b4c753e0e820c32480d49154e6f',
-        desc: '線上點餐'
       }
     ];
 
@@ -298,53 +196,9 @@
       renderStoreList();
     };
 
-    // 載入資料 (從 LocalStorage)
+    // 店家資料直接由 INITIAL_STORES 維護，修改程式碼後重新整理即可更新
     function loadStores() {
-      const saved = localStorage.getItem('order_shortcuts_stores');
-      if (saved) {
-        try {
-          stores = JSON.parse(saved);
-          // 將舊版品牌首頁自動更新為照片中掃描到的延平南店專屬 QR 碼網址
-          let migrated = false;
-          stores = stores.map(store => {
-            const next = { ...store };
-            if (next.name && /一沐日|A NICE HOLIDAY|一杯日/i.test(next.name) &&
-                ['https://order.aniceholiday.com.tw', 'https://order.aniceholiday.com.tw/', 'http://order.aniceholiday.com.tw', 'http://order.aniceholiday.com.tw/'].includes(String(next.url || '').toLowerCase())) {
-              next.url = INITIAL_STORES.find(item => item.id === '2').url;
-              next.name = '一沐日（台北延平南店）';
-              migrated = true;
-            }
-            if (next.name && /八方雲集/.test(next.name) &&
-                ['https://order.bafang.com.tw', 'https://order.bafang.com.tw/', 'http://order.bafang.com.tw', 'http://order.bafang.com.tw/'].includes(String(next.url || '').toLowerCase())) {
-              next.url = INITIAL_STORES.find(item => item.id === '1').url;
-              migrated = true;
-            }
-            return next;
-          });
-          // 將新增的點餐與候位捷徑補入既有手機資料
-          for (const item of INITIAL_STORES.slice(2)) {
-            if (!stores.some(store => store.id === item.id || store.name === item.name)) {
-              stores.push(item);
-              migrated = true;
-            }
-          }
-          if (!stores.some(store => store.id === '5' || store.name === '雙月')) {
-            stores.push(INITIAL_STORES.find(item => item.id === '5'));
-            migrated = true;
-          }
-          if (migrated) saveToLocalStorage();
-        } catch (e) {
-          stores = [...INITIAL_STORES];
-        }
-      } else {
-        stores = [...INITIAL_STORES];
-        saveToLocalStorage();
-      }
-    }
-
-    // 儲存至 LocalStorage
-    function saveToLocalStorage() {
-      localStorage.setItem('order_shortcuts_stores', JSON.stringify(stores));
+      stores = INITIAL_STORES.map(store => ({ ...store }));
     }
 
     // 渲染分類標籤
@@ -379,23 +233,15 @@
       renderStoreList();
     }
 
-    // 渲染店家列表
+    // 渲染精簡店家列表
     function renderStoreList() {
-      const searchInput = document.getElementById('searchInput');
-      const query = searchInput.value.trim().toLowerCase();
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
       const clearBtn = document.getElementById('clearSearchBtn');
-      
-      if (query) {
-        clearBtn.classList.remove('hidden');
-      } else {
-        clearBtn.classList.add('hidden');
-      }
+      clearBtn.classList.toggle('hidden', !query);
 
-      // 篩選邏輯
       const filtered = stores.filter(store => {
         const matchesCat = selectedCategory === '全部' || store.category === selectedCategory;
-        const matchesQuery = store.name.toLowerCase().includes(query) || 
-                             (store.desc && store.desc.toLowerCase().includes(query)) ||
+        const matchesQuery = store.name.toLowerCase().includes(query) ||
                              store.category.toLowerCase().includes(query);
         return matchesCat && matchesQuery;
       });
@@ -411,55 +257,25 @@
 
       emptyEl.classList.add('hidden');
       listEl.innerHTML = filtered.map(store => `
-        <div class="bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all relative group">
-          
-          <!-- 店家名稱與分類 -->
-          <div class="flex justify-between items-start gap-2 mb-1.5">
-            <div>
-              <span class="inline-block px-2 py-0.5 mb-1 bg-sky-50 dark:bg-sky-950/50 text-sky-600 dark:text-sky-400 font-semibold text-[10px] rounded-md border border-sky-100 dark:border-sky-900/50">
-                ${escapeHtml(store.category)}
-              </span>
-              <h2 class="text-base font-bold text-slate-900 dark:text-white leading-snug">
-                ${escapeHtml(store.name)}
-              </h2>
-            </div>
-            
-            <!-- 選單按鈕 (編輯 / 刪除) -->
-            <div class="flex items-center gap-1">
-              <button onclick="openEditModal('${store.id}')" class="p-1.5 text-slate-400 hover:text-sky-600 dark:hover:text-sky-400 transition" title="編輯">
-                <i class="fa-regular fa-pen-to-square text-sm"></i>
-              </button>
-              <button onclick="deleteStore('${store.id}')" class="p-1.5 text-slate-400 hover:text-rose-500 transition" title="刪除">
-                <i class="fa-regular fa-trash-can text-sm"></i>
-              </button>
-            </div>
+        <div class="bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 rounded-xl px-3 py-2.5 shadow-sm flex items-center gap-3">
+          <div class="w-9 h-9 shrink-0 rounded-xl bg-sky-50 dark:bg-sky-950/50 text-sky-600 dark:text-sky-400 flex items-center justify-center">
+            <i class="fa-solid fa-store text-sm"></i>
           </div>
-
-          <!-- 說明/備註 -->
-          ${store.desc ? `
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3.5 flex items-center gap-1.5">
-              <i class="fa-solid fa-tag text-[10px] text-slate-400"></i>
-              <span>${escapeHtml(store.desc)}</span>
-            </p>
-          ` : '<div class="mb-3.5"></div>'}
-
-          <!-- 按鈕操作區 -->
-          <div class="flex items-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-700/60">
-            <!-- 立即點餐 (主按鈕) -->
-            <a href="${escapeHtml(store.url)}" target="_blank" rel="noopener noreferrer" 
-              class="flex-1 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-medium text-xs py-2.5 px-3 rounded-xl shadow-sm flex items-center justify-center gap-1.5 transition active:scale-95">
-              <i class="fa-solid fa-utensils"></i>
+          <div class="min-w-0 flex-1">
+            <h2 class="text-sm font-bold text-slate-900 dark:text-white leading-tight truncate">${escapeHtml(store.name)}</h2>
+            <span class="text-[11px] text-slate-500 dark:text-slate-400">${escapeHtml(store.category)}</span>
+          </div>
+          <div class="flex shrink-0 items-center gap-1.5">
+            <button onclick="copyToClipboard('${escapeHtml(store.url)}')" title="複製連結" aria-label="複製連結"
+              class="w-8 h-8 rounded-lg text-slate-400 hover:text-sky-600 dark:hover:text-sky-400 flex items-center justify-center">
+              <i class="fa-regular fa-copy text-xs"></i>
+            </button>
+            <a href="${escapeHtml(store.url)}" target="_blank" rel="noopener noreferrer"
+              class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-medium text-xs py-2 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition active:scale-95">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
               <span>${store.category === '候位登記' ? '立即候位' : '立即點餐'}</span>
             </a>
-
-            <!-- 複製網址按鈕 -->
-            <button onclick="copyToClipboard('${escapeHtml(store.url)}')" 
-              class="bg-slate-100 dark:bg-slate-700/60 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium text-xs py-2.5 px-3 rounded-xl flex items-center justify-center gap-1.5 transition active:scale-95">
-              <i class="fa-regular fa-copy"></i>
-              <span>複製連結</span>
-            </button>
           </div>
-
         </div>
       `).join('');
     }
@@ -492,133 +308,6 @@
         toast.classList.remove('opacity-100', 'translate-y-0');
         toast.classList.add('opacity-0', 'translate-y-4');
       }, 2000);
-    }
-
-    // 開啟新增 Modal
-    function openAddModal() {
-      document.getElementById('modalTitle').innerText = '新增點餐店家';
-      document.getElementById('storeId').value = '';
-      document.getElementById('storeForm').reset();
-      openModal('storeModal');
-    }
-
-    // 開啟編輯 Modal
-    function openEditModal(id) {
-      const store = stores.find(s => s.id === id);
-      if (!store) return;
-
-      document.getElementById('modalTitle').innerText = '編輯店家資料';
-      document.getElementById('storeId').value = store.id;
-      document.getElementById('storeName').value = store.name;
-      document.getElementById('storeCategory').value = store.category;
-      document.getElementById('storeUrl').value = store.url;
-      document.getElementById('storeDesc').value = store.desc || '';
-
-      openModal('storeModal');
-    }
-
-    // 選擇快速分類
-    function selectQuickCategory(category) {
-      document.getElementById('storeCategory').value = category;
-    }
-
-    // 儲存店家 (新增/編輯)
-    function saveStore(e) {
-      e.preventDefault();
-      const id = document.getElementById('storeId').value;
-      const name = document.getElementById('storeName').value.trim();
-      const category = document.getElementById('storeCategory').value.trim();
-      const url = document.getElementById('storeUrl').value.trim();
-      const desc = document.getElementById('storeDesc').value.trim();
-
-      if (id) {
-        // 編輯模式
-        const index = stores.findIndex(s => s.id === id);
-        if (index !== -1) {
-          stores[index] = { id, name, category, url, desc };
-          showToast('店家資料已更新');
-        }
-      } else {
-        // 新增模式
-        const newStore = {
-          id: Date.now().toString(),
-          name,
-          category,
-          url,
-          desc
-        };
-        stores.unshift(newStore);
-        showToast('新店家已成功加入');
-      }
-
-      saveToLocalStorage();
-      renderCategoryTags();
-      renderStoreList();
-      closeModal('storeModal');
-    }
-
-    // 刪除店家
-    function deleteStore(id) {
-      const store = stores.find(s => s.id === id);
-      if (!store) return;
-
-      if (confirm(`確定要刪除「${store.name}」嗎？`)) {
-        stores = stores.filter(s => s.id !== id);
-        saveToLocalStorage();
-        renderCategoryTags();
-        renderStoreList();
-        showToast('已刪除店家', 'fa-trash-can');
-      }
-    }
-
-    // 導出 JSON 資料
-    function exportData() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(stores, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `點餐捷徑備份_${new Date().toISOString().slice(0,10)}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-      showToast('資料已成功導出');
-    }
-
-    // 匯入 JSON 資料
-    function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const imported = JSON.parse(e.target.result);
-          if (Array.isArray(imported)) {
-            stores = imported;
-            saveToLocalStorage();
-            renderCategoryTags();
-            renderStoreList();
-            closeModal('backupModal');
-            showToast('資料已成功匯入');
-          } else {
-            alert('匯入格式不正確');
-          }
-        } catch (err) {
-          alert('解析 JSON 檔案失敗');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    // 重置為預設資料
-    function resetDefaultData() {
-      if (confirm('確定要將資料重置為預設值嗎？自訂的店家將會被清除。')) {
-        stores = [...INITIAL_STORES];
-        saveToLocalStorage();
-        renderCategoryTags();
-        renderStoreList();
-        closeModal('backupModal');
-        showToast('已重置為預設資料');
-      }
     }
 
     // 開啟通用 Modal
