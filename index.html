@@ -154,33 +154,33 @@
       {
         id: '1',
         name: '八方雲集（延平南店）',
-        category: '水餃鍋貼',
+        category: '外帶點餐',
         url: 'https://onlineorder.8way.com.tw/NOrder.aspx?SID=0875&OTP=09', // 延平南店 QR 碼
       },
       {
         id: '2',
         name: '一沐日（台北延平南店）',
-        category: '手搖飲料',
+        category: '飲料店',
         url: 'https://aniceholiday.doteat.tw/menu?storeId=NQv0nErm-00006vf7Le&showBulletin=1&utm_source=store&utm_medium=qrcode&utm_campaign=6956&waitOnSpotMode=1', // 台北延平南店 QR 碼
       },
 
       {
         id: '3',
         name: '鬍鬚張（台北南門店）',
-        category: '便當快餐',
+        category: '外帶點餐',
         url: 'https://ddc.ai/3zeeVm',
       },
       {
         id: '4',
         name: '樂天皇朝（宏匯廣場）',
-        category: '候位登記',
+        category: '內用候位',
         url: 'https://inline.app/-LRIFWFrmwD1RkG6jysN:inline-live-2a466/-NibSLtgOfzmxguiLkAw/waiting',
       },
 
       {
         id: '5',
         name: '雙月（濟南店）',
-        category: '便當快餐',
+        category: '外帶點餐',
         url: 'https://line.quickclick.cc/line/views/web/menu?accountId=7217&token=3960ccdf0395eeffdbb2e31165101e64f5417472c7b72cbf18db6605d739a876',
       }
     ];
@@ -259,11 +259,11 @@
       listEl.innerHTML = filtered.map(store => `
         <div class="bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 rounded-xl px-3 py-2.5 shadow-sm flex items-center gap-3">
           <div class="w-9 h-9 shrink-0 rounded-xl bg-sky-50 dark:bg-sky-950/50 text-sky-600 dark:text-sky-400 flex items-center justify-center">
-            <i class="fa-solid fa-store text-sm"></i>
+            <span class="text-lg leading-none" aria-hidden="true">${store.category === '外帶點餐' ? '🍱' : store.category === '內用候位' ? '🍽️' : '🥤'}</span>
           </div>
           <div class="min-w-0 flex-1">
-            <h2 class="text-sm font-bold text-slate-900 dark:text-white leading-tight truncate">${escapeHtml(store.name)}</h2>
-            <span class="text-[11px] text-slate-500 dark:text-slate-400">${escapeHtml(store.category)}</span>
+            <h2 class="text-sm font-bold text-slate-900 dark:text-white leading-tight whitespace-normal break-words">${escapeHtml(store.name)}</h2>
+            
           </div>
           <div class="flex shrink-0 items-center gap-1.5">
             <button onclick="copyToClipboard('${escapeHtml(store.url)}')" title="複製連結" aria-label="複製連結"
@@ -273,7 +273,7 @@
             <a href="${escapeHtml(store.url)}" target="_blank" rel="noopener noreferrer"
               class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-medium text-xs py-2 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition active:scale-95">
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
-              <span>${store.category === '候位登記' ? '立即候位' : '立即點餐'}</span>
+              <span>${store.category === '內用候位' ? '立即候位' : '立即點餐'}</span>
             </a>
           </div>
         </div>
