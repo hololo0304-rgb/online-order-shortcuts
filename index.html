@@ -191,7 +191,7 @@
       },
       {
         id: '7',
-        name: '八方雲集（萬華青年店）',
+        name: '梁社漢排骨（萬華青年店）',
         category: '外帶點餐',
         url: 'https://ezorder.8way.com.tw/108002',
       }
@@ -223,6 +223,21 @@
       for (let i = stores.length - 1; i > 0; i--) {
         const j = Math.floor(randomForToday() * (i + 1));
         [stores[i], stores[j]] = [stores[j], stores[i]];
+      }
+
+      // 同品牌分店仍採每日隨機；若有梁社漢排骨延平南店，優先於其他梁社漢分店
+      const liangSheHanStores = stores
+        .map((store, index) => ({ store, index }))
+        .filter(item => item.store.name.includes('梁社漢排骨'));
+      const yanping = liangSheHanStores.find(item => item.store.name.includes('延平南店'));
+      if (yanping) {
+        liangSheHanStores
+          .filter(item => !item.store.name.includes('延平南店'))
+          .forEach(item => {
+            if (yanping.index > item.index) {
+              [stores[yanping.index], stores[item.index]] = [stores[item.index], stores[yanping.index]];
+            }
+          });
       }
     }
 
